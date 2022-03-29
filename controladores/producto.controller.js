@@ -29,14 +29,28 @@ const obtenerProductos = (request,response) =>{
             return response.status(200).json(listaProductos);
         })
         .catch( err => {
-            response.statusMessage = "Hubo un error al intener obtener los productos de la base de datos. "+err;
+            response.statusMessage = "Hubo un error al intentar obtener los productos de la base de datos. "+err;
             return response.status(400).end();
         })
 }
 
+const obtenerProductoPorId = (request,response) =>{
+    const _id = request.params.id;
+
+    Producto.findById({_id})
+        .then(productoObtenido => {
+            return response.status(200).json(productoObtenido);
+        })
+        .catch(err => {
+            response.statusMessage="Hubo un error al intentar obtener el producto de la base de datos. "+err;
+            return response.status(400).end();
+        });
+}
+
 const ControladorProducto = {
     obtenerProductos,
-    agregarProducto
+    agregarProducto,
+    obtenerProductoPorId
 }
 
 module.exports = ControladorProducto;
