@@ -47,10 +47,41 @@ const obtenerProductoPorId = (request,response) =>{
         });
 }
 
+const actualizarProducto = (request,response) =>{
+    const _id = request.params.id;
+    const {titulo,precio,descripcion} = request.body;
+    const productoActualizado = {
+        titulo,precio,descripcion
+    };
+    Producto.findByIdAndUpdate({_id},{$set:productoActualizado},{new:true})
+        .then ((producto) =>{
+            return response.status(202).json(producto);
+        })
+        .catch( err => {
+            response.statusMessage="Hubo un error al ejecutar el update. "+err;
+            return response.status(400).end();
+        })
+}
+
+const eliminarProducto = (request,response) =>{
+    const _id =request.params.id;
+    Producto.deleteOne({_id})
+        .then(() =>{
+            return response.status(204).end();
+        })
+        .catch( err =>{
+            response.statusMessage="Hubo un error al ejecutar el delete. "+err;
+            return response.status(400).end();
+        })
+}
+
+
 const ControladorProducto = {
     obtenerProductos,
     agregarProducto,
-    obtenerProductoPorId
+    obtenerProductoPorId,
+    actualizarProducto,
+    eliminarProducto
 }
 
 module.exports = ControladorProducto;
